@@ -48,6 +48,14 @@
 		const xyoutput = document.querySelector('#xyoutput');
 		const btn = document.querySelector('#Gobtn');
 		const output = document.querySelector('#output');
+		let mouseState = false;
+
+		document.addEventListener('mousedown', function(e){
+			mouseState = true;
+		});
+		document.addEventListener('mouseup', function(e){
+			mouseState = false;
+		});
 
 		btn.addEventListener('click', function($event){
 			xyoutput.innerHTML = "";
@@ -61,7 +69,7 @@
 					const input = document.createElement('input');
 					input.type = "checkbox";
 					input.dataset.index = index;
-					label.classList.add('p-1')
+					label.classList.add('p-2')
 					label.append(input)
 					col.append(label);
 					index++;
@@ -69,20 +77,14 @@
 				row++;
 				xyoutput.append(col);
 			}
-			$("#xyoutput").selectable({
-				filter:'label',
-				stop: function() {
-					$("input").attr('checked',false);
-					$(".ui-selected input", this).each(function() {
-
-						this.checked= true;
-
-					});
-					getCode()
-				}
-			});
 			document.querySelectorAll('input[type=checkbox]').forEach(function (checkbox) {
 				checkbox.addEventListener('change', getCode)
+				checkbox.addEventListener('mouseenter', function(){
+					if(mouseState){
+						checkbox.checked = !checkbox.checked;
+						getCode();
+					}
+				})
 			});
 		});
 
